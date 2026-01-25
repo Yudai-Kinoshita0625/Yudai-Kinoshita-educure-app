@@ -1,0 +1,1 @@
+# Yudai-Kinoshita-educure-app
