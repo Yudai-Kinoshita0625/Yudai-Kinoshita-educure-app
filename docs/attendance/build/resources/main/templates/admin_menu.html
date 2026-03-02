@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>管理者メニュー</title>
+<style>
+body { font-family: 'Helvetica Neue', Arial, sans-serif; background-color: #f3f4f6; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+.menu-container { background: white; padding: 40px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; max-width: 400px; text-align: center; }
+h1 { color: #1f2937; margin-bottom: 30px; font-size: 1.8em; }
+.menu-btn { display: block; width: 100%; padding: 18px; margin: 15px 0; background: #4b5563; color: white; text-decoration: none; border-radius: 10px; font-weight: bold; font-size: 1.1em; transition: 0.2s; box-sizing: border-box; }
+.menu-btn:hover { background: #374151; transform: translateY(-2px); }
+.menu-btn.accent { background: #3b82f6; }
+.menu-btn.accent:hover { background: #2563eb; }
+.back-link { margin-top: 25px; display: inline-block; color: #6b7280; text-decoration: none; font-size: 0.9em; }
+.back-link:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+<div class="menu-container">
+<h1>管理者メニュー</h1>
+
+<a th:href="@{/admin/summary}" class="menu-btn accent">勤怠一覧を確認</a>
+<a th:href="@{/admin/users}" class="menu-btn">ユーザー管理</a>
+
+<hr style="border: 0; border-top: 1px solid #e5e7eb; margin: 20px 0;">
+
+<a th:href="@{/attendance}" class="back-link">自分のカレンダーを表示</a><br>
+<a th:href="@{/logout}" class="back-link" style="color: #ef4444;">ログアウト</a>
+</div>
+</body>
+</html>

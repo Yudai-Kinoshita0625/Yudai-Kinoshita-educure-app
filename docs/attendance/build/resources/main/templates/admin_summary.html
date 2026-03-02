@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>勤怠一覧（管理者用）</title>
+<style>
+body { font-family: 'Helvetica Neue', Arial, sans-serif; background-color: #f3f4f6; padding: 20px; margin: 0; }
+.container { max-width: 1000px; margin: 0 auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+
+h1 { color: #1f2937; font-size: 1.5em; margin-bottom: 20px; border-left: 5px solid #3b82f6; padding-left: 15px; }
+
+.action-bar { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 20px; gap: 10px; flex-wrap: wrap; }
+.search-form { display: flex; gap: 10px; align-items: center; }
+.search-input { padding: 10px; border: 1px solid #d1d5db; border-radius: 8px; width: 200px; }
+
+.btn { padding: 10px 20px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; text-decoration: none; transition: 0.2s; display: inline-block; }
+.btn-search { background-color: #4b5563; color: white; }
+.btn-csv { background-color: #10b981; color: white; }
+.btn-csv:hover { background-color: #059669; }
+
+
+.table-wrapper { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; margin-top: 10px; background: white; }
+th, td { padding: 15px; text-align: left; border-bottom: 1px solid #e5e7eb; }
+th { background-color: #f9fafb; color: #4b5563; font-weight: 600; }
+tr:hover { background-color: #f3f4f6; }
+
+.status-badge { padding: 4px 8px; border-radius: 5px; font-size: 0.8em; font-weight: bold; }
+.badge-in { background: #dcfce7; color: #166534; } /* 出勤中 */
+.badge-out { background: #f3f4f6; color: #6b7280; } /* 未出勤/退勤 */
+
+.back-link { display: inline-block; margin-top: 20px; color: #6b7280; text-decoration: none; }
+.back-link:hover { text-underline-offset: 4px; text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<div class="container">
+<h1>勤怠一覧・データ抽出</h1>
+
+<div class="action-bar">
+<form th:action="@{/admin/summary}" method="get" class="search-form">
+<div>
+<label style="display:block; font-size:0.8em; color:#666;">ユーザーIDで絞り込み</label>
+<input type="text" name="userId" th:value="${param.userId}" class="search-input" placeholder="例: user01">
+</div>
+<button type="submit" class="btn btn-search">検索</button>
+<a th:href="@{/admin/summary}" style="font-size: 0.8em; color: #9ca3af; text-decoration: none;">リセット</a>
+</form>
+
+<a th:href="@{/admin/download-csv}" class="btn btn-csv">
+📥 全データをCSV保存
+</a>
+</div>
+
+<div class="table-wrapper">
+<table>
+<thead>
+<tr>
+<th>日付</th>
+<th>曜日</th>
+<th>ユーザーID</th>
+<th>出勤時刻</th>
+<th>退勤時刻</th>
+<th>メモ</th>
+</tr>
+</thead>
+<tbody>
+<tr th:each="att : ${allAttendance}">
+<td th:text="${att.workDate}">2026-02-27</td>
+<td th:text="${#temporals.dayOfWeekNameShort(att.workDate)}">金</td>
+<td style="font-weight: bold;" th:text="${att.userId}">user01</td>
+<td>
+<span th:if="${att.clockIn != null}" th:text="${#temporals.format(att.clockIn, 'HH:mm')}"></span>
+<span th:unless="${att.clockIn != null}">--:--</span>
+</td>
+<td>
+<span th:if="${att.clockOut != null}" th:text="${#temporals.format(att.clockOut, 'HH:mm')}"></span>
+<span th:unless="${att.clockOut != null}">--:--</span>
+</td>
+<td style="font-size: 0.9em; color: #666;" th:text="${att.memo}"></td>
+</tr>
+<tr th:if="${#lists.isEmpty(allAttendance)}">
+<td colspan="6" style="text-align: center; color: #9ca3af; padding: 40px;">該当する勤怠データが見つかりませんでした。</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<a th:href="@{/admin/menu}" class="back-link">← 管理者メニューへ戻る</a>
+</div>
+
+</body>
+</html>

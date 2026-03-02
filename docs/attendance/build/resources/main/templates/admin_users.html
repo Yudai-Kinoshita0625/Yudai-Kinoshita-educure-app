@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>ユーザー管理</title>
+<style>
+body { font-family: sans-serif; padding: 20px; background: #f3f4f6; }
+.card { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 20px; }
+table { width: 100%; border-collapse: collapse; }
+th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+th { background: #e5e7eb; }
+input, select { padding: 8px; border: 1px solid #ddd; border-radius: 4px; margin-right: 5px; }
+.btn { padding: 8px 15px; border: none; border-radius: 4px; cursor: pointer; color: white; text-decoration: none; }
+.btn-save { background: #10b981; }
+.btn-delete { background: #ef4444; }
+</style>
+</head>
+<body>
+<a th:href="@{/admin/menu}">← 管理者メニューに戻る</a>
+<h1>ユーザー管理画面</h1>
+
+<div class="card">
+<h3>ユーザー登録 / 更新</h3>
+<form th:action="@{/admin/users/save}" method="post">
+<input type="text" name="userId" placeholder="ユーザーID" required>
+<input type="text" name="name" placeholder="氏名" required>
+<input type="password" name="password" placeholder="パスワード" required>
+<select name="role">
+<option value="USER">USER</option>
+<option value="ADMIN">ADMIN</option>
+</select>
+<button type="submit" class="btn btn-save">保存</button>
+</form>
+</div>
+
+<div class="card">
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>氏名</th>
+<th>権限</th>
+<th>操作</th>
+</tr>
+</thead>
+<tbody>
+<tr th:each="u : ${users}">
+<td th:text="${u.userId}"></td>
+<td th:text="${u.name}"></td>
+<td th:text="${u.role}"></td>
+<td>
+<form th:action="@{/admin/users/delete}" method="post" style="display:inline;" onsubmit="return confirm('削除しますか？');">
+<input type="hidden" name="userId" th:value="${u.userId}">
+<button type="submit" class="btn btn-delete">削除</button>
+</form>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</body>
+</html>

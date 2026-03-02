@@ -1,0 +1,96 @@
+body {
+background-color: #f0f2f5;
+font-family: 'Helvetica Neue', Arial, sans-serif;
+display: flex;
+justify-content: center;
+align-items: flex-start;
+min-height: 100vh;
+margin: 0;
+padding-top: 40px;
+}
+
+.container {
+width: 100%;
+max-width: 500px;
+background-color: #ffffff;
+padding: 30px;
+border-radius: 15px;
+box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+text-align: center;
+}
+
+header h1 {
+font-size: 1.5rem;
+color: #333;
+margin-bottom: 10px;
+}
+
+.month-selector {
+display: flex;
+justify-content: center;
+align-items: center;
+gap: 15px;
+margin-bottom: 20px;
+font-weight: bold;
+font-size: 1.2rem;
+}
+
+.weather-box {
+background-color: #e9ecef;
+border-radius: 10px;
+padding: 15px;
+margin-bottom: 25px;
+}
+
+.weather-info {
+font-size: 1.1rem;
+color: #495057;
+}
+
+.calendar-main {
+background-color: #f8f9fa;
+border: 1px solid #dee2e6;
+border-radius: 10px;
+min-height: 200px;
+display: flex;
+flex-direction: column;
+justify-content: center;
+margin-bottom: 25px;
+padding: 10px;
+}
+
+.action-buttons {
+display: flex;
+flex-direction: column;
+gap: 12px;
+}
+
+.btn {
+width: 100%;
+padding: 12px;
+border: none;
+border-radius: 8px;
+font-size: 1rem;
+font-weight: bold;
+cursor: pointer;
+transition: opacity 0.2s;
+}
+
+.btn-in {
+background-color: #28a745;
+color: white;
+}
+
+.btn-out {
+background-color: #dc3545;
+color: white;
+}
+
+.btn-memo {
+background-color: #6c757d;
+color: white;
+}
+
+.btn:hover {
+opacity: 0.8;
+}
