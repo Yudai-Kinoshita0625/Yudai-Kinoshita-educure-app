@@ -74,8 +74,11 @@ onclick="handleDayClick(this)">
 <form th:action="@{/attendance/punch-in}" method="post" style="flex: 1;"><button type="submit" class="btn-in" style="width: 100%; padding: 15px; border-radius:10px; border:none; background:#3b82f6; color:white; font-weight:bold;">出勤</button></form>
 <form th:action="@{/attendance/punch-out}" method="post" style="flex: 1;"><button type="submit" class="btn-out" style="width: 100%; padding: 15px; border-radius:10px; border:none; background:#ef4444; color:white; font-weight:bold;">退勤</button></form>
 </div>
+
 <form th:action="@{/attendance/memo-save}" method="post">
-<input type="text" name="memo" maxlength="20" placeholder="本日のメモ (20文字まで)" style="width:100%; padding:12px; border-radius:8px; border:1px solid #ccc; box-sizing:border-box;">
+<input type="text" name="memo" maxlength="20" placeholder="本日のメモ (20文字まで)"
+th:value="${todayData != null ? todayData.memo : ''}"
+style="width:100%; padding:12px; border-radius:8px; border:1px solid #ccc; box-sizing:border-box;">
 <button type="submit" style="width:100%; margin-top:10px; padding:10px; border-radius:8px; border:none; background:#4b5563; color:white;">保存</button>
 </form>
 </footer>
@@ -85,11 +88,21 @@ onclick="handleDayClick(this)">
 <h3 id="modalDate"></h3><hr>
 <p>出勤：<span id="modalIn"></span> / 退勤：<span id="modalOut"></span></p>
 <p>実働：<span id="modalHours"></span></p>
-<div style="background:#f3f4f6; padding:10px; border-radius:8px;">メモ：<span id="modalMemoDisplay"></span></div>
-<button onclick="closeModal()" style="width:100%; margin-top:20px; padding:10px; border:none; background:#9ca3af; color:white; border-radius:8px;">閉じる</button>
+
+<form th:action="@{/attendance/memo-save}" method="post">
+<div style="background:#f3f4f6; padding:10px; border-radius:8px;">
+<label style="font-size: 0.8em; color: #666;">メモ編集：</label>
+<input type="text" name="memo" id="modalMemoInput" maxlength="20"
+style="width:100%; border:none; background:transparent; border-bottom:1px solid #ccc; outline:none; padding:5px 0;">
+</div>
+<button type="submit" style="width:100%; margin-top:10px; padding:10px; border:none; background:#10b981; color:white; border-radius:8px;">メモを更新して保存</button>
+</form>
+
+<button onclick="closeModal()" style="width:100%; margin-top:10px; padding:10px; border:none; background:#9ca3af; color:white; border-radius:8px;">閉じる</button>
 </div>
 </div>
 </div>
+
 <script>
 function handleDayClick(el) {
 const date = el.getAttribute('data-date'); if (!date) return;
@@ -97,7 +110,7 @@ document.getElementById('modalDate').innerText = date;
 document.getElementById('modalIn').innerText = el.getAttribute('data-in');
 document.getElementById('modalOut').innerText = el.getAttribute('data-out');
 document.getElementById('modalHours').innerText = el.getAttribute('data-hours') || "---";
-document.getElementById('modalMemoDisplay').innerText = el.getAttribute('data-memo') || "なし";
+document.getElementById('modalMemoInput').value = el.getAttribute('data-memo') || "";
 document.getElementById('detailModal').style.display = 'block';
 }
 function closeModal() { document.getElementById('detailModal').style.display = 'none'; }
