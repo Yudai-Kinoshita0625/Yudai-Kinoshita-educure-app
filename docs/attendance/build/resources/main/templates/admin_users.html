@@ -10,9 +10,11 @@ table { width: 100%; border-collapse: collapse; }
 th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
 th { background: #e5e7eb; }
 input, select { padding: 8px; border: 1px solid #ddd; border-radius: 4px; margin-right: 5px; }
-.btn { padding: 8px 15px; border: none; border-radius: 4px; cursor: pointer; color: white; text-decoration: none; }
+.btn { padding: 8px 15px; border: none; border-radius: 4px; cursor: pointer; color: white; text-decoration: none; font-size: 14px; }
 .btn-save { background: #10b981; }
 .btn-delete { background: #ef4444; }
+.btn-edit { background: #3b82f6; margin-right: 5px; }
+.btn:hover { opacity: 0.8; }
 </style>
 </head>
 <body>
@@ -21,15 +23,21 @@ input, select { padding: 8px; border: 1px solid #ddd; border-radius: 4px; margin
 
 <div class="card">
 <h3>ユーザー登録 / 更新</h3>
+<p th:if="${editUser.userId != null}" style="color: #3b82f6;">※現在 ID: <span th:text="${editUser.userId}"></span> の情報を編集中です</p>
 <form th:action="@{/admin/users/save}" method="post">
-<input type="text" name="userId" placeholder="ユーザーID" required>
-<input type="text" name="name" placeholder="氏名" required>
-<input type="password" name="password" placeholder="パスワード" required>
+<input type="text" name="userId" placeholder="ユーザーID" th:value="${editUser.userId}" required>
+
+<input type="text" name="name" placeholder="氏名" th:value="${editUser.name}" required>
+
+<input type="password" name="password" placeholder="パスワード" th:value="${editUser.password}" required>
+
 <select name="role">
-<option value="USER">USER</option>
-<option value="ADMIN">ADMIN</option>
+<option value="USER" th:selected="${editUser.role == 'USER'}">USER</option>
+<option value="ADMIN" th:selected="${editUser.role == 'ADMIN'}">ADMIN</option>
 </select>
+
 <button type="submit" class="btn btn-save">保存</button>
+<a th:if="${editUser.userId != null}" th:href="@{/admin/users}" style="font-size: 12px; margin-left: 10px; color: #666;">キャンセル</a>
 </form>
 </div>
 
@@ -49,6 +57,8 @@ input, select { padding: 8px; border: 1px solid #ddd; border-radius: 4px; margin
 <td th:text="${u.name}"></td>
 <td th:text="${u.role}"></td>
 <td>
+<a th:href="@{/admin/users/edit/{id}(id=${u.userId})}" class="btn btn-edit">編集</a>
+
 <form th:action="@{/admin/users/delete}" method="post" style="display:inline;" onsubmit="return confirm('削除しますか？');">
 <input type="hidden" name="userId" th:value="${u.userId}">
 <button type="submit" class="btn btn-delete">削除</button>

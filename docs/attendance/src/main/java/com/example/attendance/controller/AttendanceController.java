@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PathVariable; // 追加
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
@@ -80,6 +81,8 @@ public class AttendanceController {
         List<AttendanceDisplayDto> displayList = new ArrayList<>();
         LocalDate startOfMonth = targetMonth.atDay(1);
         int emptyCells = startOfMonth.getDayOfWeek().getValue() - 1;
+        if (emptyCells < 0)
+            emptyCells = 0; // 修正: 月曜日の場合など
         for (int i = 0; i < emptyCells; i++)
             displayList.add(null);
         for (LocalDate date = startOfMonth; !date.isAfter(targetMonth.atEndOfMonth()); date = date.plusDays(1)) {
@@ -122,7 +125,21 @@ public class AttendanceController {
         User user = (User) session.getAttribute("loginUser");
         if (user == null || !"ADMIN".equals(user.getRole()))
             return "redirect:/attendance";
+
         model.addAttribute("users", userRepository.findAll());
+        model.addAttribute("editUser", new User());
+        return "admin_users";
+    }
+
+    @GetMapping("/admin/users/edit/{id}")
+    public String editUser(@PathVariable("id") String id, HttpSession session, Model model) {
+        User user = (User) session.getAttribute("loginUser");
+        if (user == null || !"ADMIN".equals(user.getRole()))
+            return "redirect:/attendance";
+
+        User targetUser = userRepository.findById(id).orElse(new User());
+        model.addAttribute("users", userRepository.findAll());
+        model.addAttribute("editUser", targetUser);
         return "admin_users";
     }
 
